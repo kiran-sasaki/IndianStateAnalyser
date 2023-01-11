@@ -97,5 +97,45 @@ namespace CensusAnalyserTest
                 Console.WriteLine(ex.Message);
             }
         }
+        /// TC 2.1
+        /// Giving the correct path it should return the total count from the census
+        [TestMethod]
+        public void GivenStateCode_CSVFile_ShouldReturn_RecordsCount()
+        {
+            //totalRecords = csv.LoadCsvData(CensusAnalyser.Country.INDIA, stateCodePath, "SrNo,State Name,TIN,StateCode");
+            Assert.AreEqual(37, totalRecords.Count);
+        }
+        /// TC 2.2
+        /// Giving incorrect path should return file not found custom exception
+        [TestMethod]
+        public void GivenIncorrectPathCodeCustomException()
+        {
+            var stateCustomException = Assert.ThrowsException<CensusAnalyserException>(() => csv.LoadCsvData(CensusAnalyser.Country.INDIA, wrongStateCodePath, "SrNo,State Name,TIN,StateCode"));
+            Assert.AreEqual(stateCustomException.exception, CensusAnalyserException.ExceptionType.FILE_NOT_FOUND);
+        }
+        /// TC 2.3
+        /// Giving wrong type of path should return invalid file type custom exception
+        [TestMethod]
+        public void GivenIncorrectPathTypeCodeReturnException()
+        {
+            var customException = Assert.ThrowsException<CensusAnalyserException>(() => csv.LoadCsvData(CensusAnalyser.Country.INDIA, wrongTypeStateCodePath, "SrNo,State Name,TIN,StateCode"));
+            Assert.AreEqual(customException.exception, CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE);
+        }
+        /// TC 2.4
+        /// Giving wrong delimiter should return incorrect delimiter custom exception
+        [TestMethod]
+        public void GivenWrongHeaderStateCodeReturnCustomException()
+        {
+            var stateException = Assert.ThrowsException<CensusAnalyserException>(() => csv.LoadCsvData(CensusAnalyser.Country.INDIA, delimiterStateCodePath, "SrNo,State Name,TIN,StateCode"));
+            Assert.AreEqual(stateException.exception, CensusAnalyserException.ExceptionType.INCOREECT_DELIMITER);
+        }
+        /// TC 2.5
+        /// Giving wrong header type should return incorrect header type custom exception
+        [TestMethod]
+        public void GivenWrongDelimiterCodeReturnCustomException()
+        {
+            var stateException = Assert.ThrowsException<CensusAnalyserException>(() => csv.LoadCsvData(CensusAnalyser.Country.INDIA, wrongHeaderStateCodePath, "SrNo,State Name,TIN,StateCode"));
+            Assert.AreEqual(stateException.exception, CensusAnalyserException.ExceptionType.INCORRECT_HEADER);
+        }
     }
 }
